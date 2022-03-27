@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      account: null,
+      account: "",
       mainInstance: null,
     }
   }
@@ -64,19 +64,31 @@ class Navbar extends Component {
     return (
       <nav
         className="navbar navbar-dark shadow"
-        style={{
-          backgroundColor: "#1b2021",
-          height: "60px",
-          color: "white",
-          marginBottom: "50px"
-        }}
+        id="navbar"
       >
-        {/* Link to Active voting page (nav-header) */}
-        <Link to="/active"><b style={{ cursor: "pointer", color: "white" }}>Avalanche Votings</b></Link>
+        {/* Logo and Title  */}
+        <div className="col-8 align-middle">
+          <img src="/logo.svg" alt="" height="50px" width="50px" id="logo" className="inline-block align-middle" />
+          <span className="inline-block align-middle" id="logo-title">
+            <Link to="/active" >
+              Avalanche Votings
+            </Link>
+          </span>
+        </div>
 
         {/* Account address on the right side of the navbar  */}
-        <span style={{ float: "right" }}>{this.props.account}</span>
-      </nav>
+        <div className="col-4">
+          <div id="address" className="d-flex justify-content-end">
+            <a
+              href={`https://snowtrace.io/address/${this.props.account}`}
+              target="_blank" rel="noopener noreferrer"
+            >
+              {`${this.props.account.slice(0, 10)}...`}
+            </a>
+          </div>
+        </div>
+
+      </nav >
     );
   }
 }

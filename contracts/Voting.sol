@@ -36,7 +36,7 @@ contract Voting {
 
     require(_start > block.timestamp, "Invalid starting date.");
     require(_end > _start, "Invalid ending date. It should be later than the starting date.");
-    require(_candidates.length > 0, "There should be at least one candidate.");
+    require(_candidates.length > 1, "There should be at least two candidates.");
 
     name = _name;
     description = _description;

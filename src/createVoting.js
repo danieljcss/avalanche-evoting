@@ -66,7 +66,7 @@ class CreateVoting extends Component {
     const date = new Date()
     const offset = date.getTimezoneOffset()
     const localDate = new Date(date.getTime() - (offset * 60 * 1000))
-    const formattedDate = localDate.toISOString().split('T')[0]
+    const formattedDate = localDate.toISOString().split(".")[0].slice(0, -3)
     this.setState({
       date: formattedDate,
       start: formattedDate,
@@ -82,8 +82,8 @@ class CreateVoting extends Component {
     const votingDetails = {
       votingname: this.state.votingname,
       description: this.state.description,
-      start: this.state.start,
-      end: this.state.end,
+      start: Date.parse(this.state.start),
+      end: Date.parse(this.state.end),
       candidateObjects: document.getElementsByName("candidate").values(),
       candidates: [],
     }
@@ -140,7 +140,7 @@ class CreateVoting extends Component {
           <div className="form-group">
             <label>Start date</label>
             <input
-              type="date"
+              type="datetime-local"
               required
               className="form-control date"
               min={this.state.date}
@@ -152,7 +152,7 @@ class CreateVoting extends Component {
           <div className="form-group">
             <label>End date</label>
             <input
-              type="date"
+              type="datetime-local"
               required
               className="form-control date"
               min={this.state.start}
@@ -186,7 +186,7 @@ class CreateVoting extends Component {
 
           <div>
             <button
-              className="btn btn-success grid-item"
+              className="btn btn-danger grid-item"
               style={{ width: 100 }}
               type="submit"
             >

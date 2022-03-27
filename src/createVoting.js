@@ -11,8 +11,9 @@ class CreateVoting extends Component {
       date: "",
       start: "",
       end: "",
+      ncandidates: 2,
       candidates: [],
-      account: null,
+      account: "",
       mainInstance: null,
       provider: null
     }
@@ -22,8 +23,9 @@ class CreateVoting extends Component {
   async init() {
     try {
       const connect = await web3Connect()
+      const account = await connect.account.getAddress()
       this.setState({
-        account: connect.account,
+        account: account,
         mainInstance: connect.contract,
         provider: connect.provider,
       })
@@ -62,6 +64,14 @@ class CreateVoting extends Component {
     })
   }
 
+  onChangeCandidate(e, n) {
+    let candidatesList = this.state.candidates
+    candidatesList[n - 1] = e.target.value
+    this.setState({
+      candidates: candidatesList,
+    })
+  }
+
   setFormattedDates() {
     const date = new Date()
     const offset = date.getTimezoneOffset()
@@ -84,15 +94,7 @@ class CreateVoting extends Component {
       description: this.state.description,
       start: Date.parse(this.state.start),
       end: Date.parse(this.state.end),
-      candidateObjects: document.getElementsByName("candidate").values(),
-      candidates: [],
-    }
-
-    let i = 0
-
-    for (let value of votingDetails.candidateObjects) {
-      votingDetails.candidates[i] = value.value
-      i++
+      candidates: this.state.candidates,
     }
 
     // Making transaction to the Main contract instance, for creating a new voting
@@ -112,6 +114,7 @@ class CreateVoting extends Component {
     return (
       <div className="container card">
         <h3>Create New Voting</h3>
+        <div>{this.state.votingname}</div>
 
         {/* New Voting Form */}
         <form onSubmit={e => this.onSubmit(e)}>
@@ -168,7 +171,7 @@ class CreateVoting extends Component {
               required
               className="form-control"
               placeholder="Candidate Name"
-              name="candidate"
+              onChange={e => this.onChangeCandidate(e, 1)}
             />
 
             <br />
@@ -178,7 +181,7 @@ class CreateVoting extends Component {
               required
               className="form-control"
               placeholder="Candidate Name"
-              name="candidate"
+              onChange={e => this.onChangeCandidate(e, 2)}
             />
           </div>
 

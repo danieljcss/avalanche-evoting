@@ -51,7 +51,7 @@ class ActiveVotings extends Component {
     this.state = {
       data: [],
       loading: false,
-      account: null,
+      account: "",
       mainInstance: null,
       provider: null
     }
@@ -61,8 +61,9 @@ class ActiveVotings extends Component {
   async init() {
     try {
       const connect = await web3Connect()
+      const account = await connect.account.getAddress()
       this.setState({
-        account: connect.account,
+        account: account,
         mainInstance: connect.contract,
         provider: connect.provider,
       })

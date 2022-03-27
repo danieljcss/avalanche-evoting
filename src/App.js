@@ -21,8 +21,9 @@ class App extends Component {
   async init() {
     try {
       const connect = await web3Connect()
+      const account = await connect.account.getAddress()
       this.setState({
-        account: connect.account,
+        account: account,
         mainInstance: connect.contract
       })
     } catch (error) {
@@ -33,10 +34,9 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Navbar account={this.state.account} />
         {/*For routing through the react application*/}
         <Routes>
-          {/* Navbar */}
-
           {/* Default route to ActiveVotings component 
           <Route path="/" exact>
             <Route path="/active" element={<ActiveVotings account={this.state.account} />
@@ -59,26 +59,26 @@ class App extends Component {
   }
 }
 
-// class Navbar extends Component {
-//   render() {
-//     return (
-//       <nav
-//         className="navbar navbar-dark shadow"
-//         style={{
-//           backgroundColor: "#1b2021",
-//           height: "60px",
-//           color: "white",
-//           marginBottom: "50px"
-//         }}
-//       >
-//         {/* Link to Active voting page (nav-header) */}
-//         <Link to="/active"><b style={{ cursor: "pointer", color: "white" }}>Avalanche Votings</b></Link>
+class Navbar extends Component {
+  render() {
+    return (
+      <nav
+        className="navbar navbar-dark shadow"
+        style={{
+          backgroundColor: "#1b2021",
+          height: "60px",
+          color: "white",
+          marginBottom: "50px"
+        }}
+      >
+        {/* Link to Active voting page (nav-header) */}
+        <Link to="/active"><b style={{ cursor: "pointer", color: "white" }}>Avalanche Votings</b></Link>
 
-//         {/* Account address on the right side of the navbar  */}
-//         <span style={{ float: "right" }}>{this.state.account}</span>
-//       </nav>
-//     );
-//   }
-// }
+        {/* Account address on the right side of the navbar  */}
+        <span style={{ float: "right" }}>{this.props.account}</span>
+      </nav>
+    );
+  }
+}
 
 export default App;

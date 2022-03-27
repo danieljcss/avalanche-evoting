@@ -79,11 +79,11 @@ class ActiveVotings extends Component {
   }
 
   async loadData() {
-    this.setState({ loading: true });
+    this.setState({ loading: true })
 
     // votingId maps to total votings created
-    let eCount = await this.state.mainInstance.votingId();
-    let votings = [], votingDetails = [], votingComponents = [];
+    let eCount = await this.state.mainInstance.votingId()
+    let votings = [], votingDetails = [], votingComponents = []
 
     // Voting details of every voting created by MainContract
     for (let i = 0; i < eCount; i++) {
@@ -117,22 +117,22 @@ class ActiveVotings extends Component {
       votingDetails[i].votingEnd = await VotingContract.end()
 
       // Voting id
-      votingDetails[i].votingId = i;
+      votingDetails[i].votingId = i
 
       // Organising candidates into components
       let candidatesCount = await VotingContract.candidatesCount()
-      let candidates = [], candidateComponents = [];
-      candidates[i] = [];
-      candidateComponents[i] = [];
+      let candidates = [], candidateComponents = []
+      candidates[i] = []
+      candidateComponents[i] = []
 
       for (let j = 0; j < candidatesCount; j++) {
-        candidates[i].push(await VotingContract.candidates(j));
+        candidates[i].push(await VotingContract.candidates(j))
         candidateComponents[i].push(
           <Candidates
             name={candidates[i][j][1]}
             voteCount={candidates[i][j][2]}
           />
-        );
+        )
       }
 
       // Saving the votingDetails in the form of a component
@@ -142,14 +142,14 @@ class ActiveVotings extends Component {
           candidates={candidates[i]}
           candidateComponent={candidateComponents[i]}
         />
-      );
+      )
     }
 
     this.setState({
       data: votingComponents,
       loading: false,
-    });
-  };
+    })
+  }
 
   render() {
     return (
@@ -159,7 +159,7 @@ class ActiveVotings extends Component {
           <img
             style={{ width: "25px", marginRight: "20px", cursor: "pointer" }}
             alt=""
-            onClick={this.loadData}
+            onClick={e => this.loadData(e)}
             src="https://img.icons8.com/color/50/000000/synchronize.png"
           />
           <Link to="/createVoting">
@@ -186,7 +186,7 @@ class ActiveVotings extends Component {
 
         <center>{this.state.loading ? <Loader size="40px" /> : <></>}</center>
       </div>
-    );
+    )
   }
 }
 

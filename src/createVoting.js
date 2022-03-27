@@ -8,8 +8,9 @@ class CreateVoting extends Component {
     this.state = {
       votingname: "",
       description: "",
-      start: 0,
-      end: 1,
+      date: "",
+      start: "",
+      end: "",
       candidates: [],
       account: null,
       mainInstance: null,
@@ -32,31 +33,45 @@ class CreateVoting extends Component {
   }
 
   componentDidMount() {
-    this.init();
+    this.init()
+    this.setFormattedDates()
   }
 
   onChangeVotingName(e) {
     this.setState({
       votingname: e.target.value,
-    });
+    })
   }
 
   onChangeDescription(e) {
     this.setState({
       description: e.target.value,
-    });
+    })
   }
 
   onChangeStart(e) {
     this.setState({
       start: e.target.value,
-    });
+      end: e.target.value,
+    })
   }
 
   onChangeEnd(e) {
     this.setState({
       end: e.target.value,
-    });
+    })
+  }
+
+  setFormattedDates() {
+    const date = new Date()
+    const offset = date.getTimezoneOffset()
+    const localDate = new Date(date.getTime() - (offset * 60 * 1000))
+    const formattedDate = localDate.toISOString().split('T')[0]
+    this.setState({
+      date: formattedDate,
+      start: formattedDate,
+      end: formattedDate,
+    })
   }
 
   // Function to be called when the form is submitted
@@ -128,7 +143,8 @@ class CreateVoting extends Component {
               type="date"
               required
               className="form-control date"
-              value="2022-01-01"
+              min={this.state.date}
+              value={this.state.start}
               onChange={e => this.onChangeStart(e)}
             ></input>
           </div>
@@ -139,39 +155,32 @@ class CreateVoting extends Component {
               type="date"
               required
               className="form-control date"
-              value="2022-01-01"
+              min={this.state.start}
+              value={this.state.end}
               onChange={e => this.onChangeEnd(e)}
             ></input>
           </div>
 
-          <table>
-            <tr>
-              <td id="1" className="form-group">
-                <label>Candidate 1</label>
-                <td>
-                  <input
-                    type="text"
-                    required
-                    className="form-control"
-                    placeholder="Candidate Name"
-                    name="candidate"
-                  />
-                </td>
+          <div id="1" className="form-group">
+            <label>Candidate 1</label>
+            <input
+              type="text"
+              required
+              className="form-control"
+              placeholder="Candidate Name"
+              name="candidate"
+            />
 
-                <br />
-                <label>Candidate 2</label>
-                <td>
-                  <input
-                    type="text"
-                    required
-                    className="form-control"
-                    placeholder="Candidate Name"
-                    name="candidate"
-                  />
-                </td>
-              </td>
-            </tr>
-          </table>
+            <br />
+            <label>Candidate 2</label>
+            <input
+              type="text"
+              required
+              className="form-control"
+              placeholder="Candidate Name"
+              name="candidate"
+            />
+          </div>
 
           <br />
 

@@ -7,42 +7,50 @@ import VotingJson from "./artifacts/contracts/Voting.sol/Voting.json"
 import VoteModal from "./voteModal"
 
 // Voting component for organising voting details
-let Voting = (props) => (
-  <tr>
-    <td>{props.voting.votingId}</td>
+class Voting extends Component {
+  render() {
+    return (
+      <tr>
+        <td>{this.props.voting.votingId}</td>
 
-    <td>
-      {props.voting.votingName} <br />
-      <font className="text-muted" size="2">
-        <b>{props.voting.votingDescription}</b>
-      </font>
-      <br />
-      <font className="text-muted" size="2">
-        {props.voting.votingAddress}
-      </font>
-    </td>
+        <td>
+          {this.props.voting.votingName} <br />
+          <font className="text-muted" size="2">
+            <b>{this.props.voting.votingDescription}</b>
+          </font>
+          <br />
+          <font className="text-muted" size="2">
+            {this.props.voting.votingAddress}
+          </font>
+        </td>
 
-    <td style={{ textAlign: "center" }}>{props.candidateComponent}</td>
+        <td style={{ textAlign: "center" }}>{this.props.candidateComponent}</td>
 
-    <td style={{ textAlign: "center" }}>
-      {!props.voting.hasVoted ? (
-        // Vote Modal would be mounted if the user has not voted
-        <VoteModal voting={props.voting} candidates={props.candidates} />
-      ) : (
-        <font size="2" color="green">
-          You have voted!
-        </font>
-      )}
-    </td>
-  </tr>
-)
+        <td style={{ textAlign: "center" }}>
+          {!this.props.voting.hasVoted ? (
+            // Vote Modal would be mounted if the user has not voted
+            <VoteModal voting={this.props.voting} candidates={this.props.candidates} />
+          ) : (
+            <font size="2" color="green">
+              You have voted!
+            </font>
+          )}
+        </td>
+      </tr>
+    )
+  }
+}
 
 // Candidate component for organising candidate details of each candidate
-let Candidates = (props) => (
-  <font size="2">
-    <b>{props.name}</b> ({props.voteCount}) <br />
-  </font>
-)
+class Candidates extends Component {
+  render() {
+    return (
+      <font size="2">
+        <b>{this.props.name}</b> ({this.props.voteCount}) <br />
+      </font>
+    )
+  }
+}
 
 // ActiveVotings component would fetch and display all the the votings deployed by the MainContract.sol
 class ActiveVotings extends Component {
@@ -86,12 +94,12 @@ class ActiveVotings extends Component {
     let eCount = await this.state.mainInstance.votingId()
     let votings = [], votingDetails = [], votingComponents = []
 
-    // Voting details of every voting created by MainContract
+    // Voting details of every voting created by Main contract
     for (let i = 0; i < eCount; i++) {
       votings[i] = await this.state.mainInstance.Votings(i);
       let VotingContract = new ethers.Contract(votings[i], VotingJson.abi, this.state.provider)
 
-      votingDetails[i] = []
+      votingDetails[i] = {}
 
       // Account address of the voter
       votingDetails[i].account = this.state.account
@@ -112,11 +120,12 @@ class ActiveVotings extends Component {
       votingDetails[i].votingDescription = await VotingContract.description()
 
       // Start date of the voting
-      votingDetails[i].votingStart = await VotingContract.start()
+      let bigStart = await VotingContract.start()
+      votingDetails[i].votingStart = bigStart.toNumber()
 
       // End date of the voting
-      votingDetails[i].votingEnd = await VotingContract.end()
-
+      let bigEnd = await VotingContract.end()
+      votingDetails[i].votingEnd = bigEnd.toNumber()
       // Voting id
       votingDetails[i].votingId = i
 
@@ -130,6 +139,7 @@ class ActiveVotings extends Component {
         candidates[i].push(await VotingContract.candidates(j))
         candidateComponents[i].push(
           <Candidates
+            key={j}
             name={candidates[i][j][1]}
             voteCount={candidates[i][j][2]}
           />
@@ -139,6 +149,7 @@ class ActiveVotings extends Component {
       // Saving the votingDetails in the form of a component
       votingComponents[i] = (
         <Voting
+          key={i}
           voting={votingDetails[i]}
           candidates={candidates[i]}
           candidateComponent={candidateComponents[i]}
@@ -182,7 +193,7 @@ class ActiveVotings extends Component {
             </tr>
           </thead>
 
-          <tbody>{this.state.data}</tbody>
+          <tbody>{this.state.data[0]}</tbody>
         </table>
 
         <center>{this.state.loading ? <Loader size="40px" /> : <></>}</center>
@@ -191,4 +202,4 @@ class ActiveVotings extends Component {
   }
 }
 
-export default ActiveVotings;
+export default ActiveVotings

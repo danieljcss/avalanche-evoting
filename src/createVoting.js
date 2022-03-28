@@ -54,8 +54,12 @@ class CreateVoting extends Component {
   onChangeStart(e) {
     this.setState({
       start: e.target.value,
-      end: e.target.value,
     })
+    if (Date.parse(this.state.end) <= Date.parse(e.target.value)) {
+      this.setState({
+        end: e.target.value,
+      })
+    }
   }
 
   onChangeEnd(e) {
@@ -114,7 +118,6 @@ class CreateVoting extends Component {
     return (
       <div className="container card">
         <h3>Create New Voting</h3>
-        <div>{this.state.votingname}</div>
 
         {/* New Voting Form */}
         <form onSubmit={e => this.onSubmit(e)}>

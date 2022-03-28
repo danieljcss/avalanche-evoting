@@ -130,7 +130,8 @@ class ActiveVotings extends Component {
       votingDetails[i].votingId = i
 
       // Organising candidates into components
-      let candidatesCount = await VotingContract.candidatesCount()
+      let candidatesCountBig = await VotingContract.candidatesCount()
+      let candidatesCount = candidatesCountBig.toNumber()
       let candidates = [], candidateComponents = []
       candidates[i] = []
       candidateComponents[i] = []
@@ -141,7 +142,7 @@ class ActiveVotings extends Component {
           <Candidates
             key={j}
             name={candidates[i][j][1]}
-            voteCount={candidates[i][j][2]}
+            voteCount={candidates[i][j][2].toNumber()}
           />
         )
       }
@@ -193,7 +194,7 @@ class ActiveVotings extends Component {
             </tr>
           </thead>
 
-          <tbody>{this.state.data[0]}</tbody>
+          <tbody>{this.state.data}</tbody>
         </table>
 
         <center>{this.state.loading ? <Loader size="40px" /> : <></>}</center>

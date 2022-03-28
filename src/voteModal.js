@@ -1,40 +1,41 @@
-import React, { useState } from "react";
-import { Box, Flex, Modal, Button, Text, Card, Radio, Field, Loader } from "rimble-ui";
+import React, { useState } from 'react'
+import { Box, Flex, Modal, Button, Card, Radio, Loader } from 'rimble-ui'
 
 // Data like voting and candidate details will be passed in the props by activeVotings.js (parent)
 function VoteModal(props) {
     // These are React Hooks and are used only for UX like opening and closing of Voting Modal and loaders
-    const [isOpen, setIsOpen] = useState(false);
-    const [loading, isLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
+    const [loading, isLoading] = useState(false)
 
     // This Hook will be used to maintain the selected candidate ID by a voter
-    const [cid, changeCid] = useState(0);
+    const [candidateId, changeCandidateId] = useState(0);
 
     const closeModal = (e) => {
-        e.preventDefault();
-        setIsOpen(false);
-    };
+        e.preventDefault()
+        setIsOpen(false)
+    }
 
     const openModal = (e) => {
-        e.preventDefault();
-        setIsOpen(true);
-    };
+        e.preventDefault()
+        setIsOpen(true)
+    }
 
     const onRadioChange = (e) => {
-        changeCid(e.target.value);
+        changeCandidateId(e.target.value);
     };
 
     // vote() function would be used to transact a vote
-    const vote = async (eid) => {
-        isLoading(true);
-        await props.voting.contractInstance.methods.vote(cid).send({ from: props.voting.account });
-        isLoading(false);
+    const vote = async () => {
+        isLoading(true)
+        let signedContract = await props.voting.contractInstance.connect(props.voting.account)
+        await signedContract.vote(candidateId)
+        isLoading(false)
     };
 
     let candid = [],
-        candidVote = [];
+        candidVote = []
     for (let i = 0; i < props.candidates.length; i++) {
-        let candidDetail = props.candidates[i][1] + " (" + props.candidates[i][2] + ")";
+        let candidDetail = props.candidates[i][1] + " (" + props.candidates[i][2].toNumber() + ")"
 
         candid.push(
             <Radio
@@ -47,7 +48,7 @@ function VoteModal(props) {
             />
         );
 
-        candidVote.push(props.candidates[i][2]);
+        candidVote.push(props.candidates[i][2])
     }
 
     return (
@@ -74,7 +75,14 @@ function VoteModal(props) {
                         {/* List of candidates with their vote count */}
                         <Box p={4} mb={3}>
                             <h3>{props.voting.votingName}</h3>
-                            <Field label="Choose candidate from below">{candid}</Field>
+                            <fieldset>
+                                <legend>
+                                    <b style={{ fontSize: "12pt" }}>
+                                        Choose candidate from below
+                                    </b>
+                                </legend>
+                                {candid}
+                            </fieldset>
                         </Box>
 
                         {/* Vote button to cast a vote */}
@@ -88,11 +96,7 @@ function VoteModal(props) {
                             {loading ? (
                                 <Loader size="40px" />
                             ) : (
-                                <Button.Outline
-                                    onClick={() => {
-                                        vote(props.voting.votingId);
-                                    }}
-                                >
+                                <Button.Outline onClick={vote}>
                                     Vote
                                 </Button.Outline>
                             )}
@@ -101,7 +105,7 @@ function VoteModal(props) {
                 </Modal>
             </Box>
         </Box>
-    );
+    )
 }
 
 export default VoteModal;

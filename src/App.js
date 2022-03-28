@@ -80,7 +80,7 @@ class Navbar extends Component {
         <div className="col-4">
           <div id="address" className="d-flex justify-content-end">
             <a
-              href={`https://snowtrace.io/address/${this.props.account}`}
+              href={`https://testnet.snowtrace.io/address/${this.props.account}`}
               target="_blank" rel="noopener noreferrer"
             >
               {`${this.props.account.slice(0, 10)}...`}

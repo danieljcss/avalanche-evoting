@@ -52,7 +52,7 @@ class Candidates extends Component {
   }
 }
 
-// ActiveVotings component would fetch and display all the the votings deployed by the MainContract.sol
+// ActiveVotings component would fetch and display all the the votings deployed by the contract Main.sol
 class ActiveVotings extends Component {
   constructor(props) {
     super(props)
@@ -61,9 +61,12 @@ class ActiveVotings extends Component {
       loading: false,
       account: "",
       mainInstance: null,
-      provider: null
+      provider: null,
+      time: 0,
     }
+    this.timer = null
   }
+
 
   // Connect application with Metamask and create smart-contract's instance
   async init() {
@@ -78,13 +81,25 @@ class ActiveVotings extends Component {
     } catch (error) {
       console.log('Wallet connection failed: ', error)
     }
+
     await this.loadData()
   }
 
   loader = false;
 
   componentDidMount() {
-    this.init();
+    this.setTime()
+    this.init()
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
+  setTime() {
+    this.timer = setInterval(() => {
+      this.setState({ time: Date.now() })
+    }, 1000)
   }
 
   async loadData() {
@@ -126,6 +141,7 @@ class ActiveVotings extends Component {
       // End date of the voting
       let bigEnd = await VotingContract.end()
       votingDetails[i].votingEnd = bigEnd.toNumber()
+
       // Voting id
       votingDetails[i].votingId = i
 
@@ -189,7 +205,7 @@ class ActiveVotings extends Component {
             <tr>
               <th style={{ width: "120px" }}>Voting ID</th>
               <th>Voting Name</th>
-              <th style={{ textAlign: "center" }}>Candiates</th>
+              <th style={{ textAlign: "center" }}>Candidates</th>
               <th style={{ textAlign: "center" }}>Vote</th>
             </tr>
           </thead>

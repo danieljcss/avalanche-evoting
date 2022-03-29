@@ -1,19 +1,28 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { expect } = require("chai")
+const { ethers } = require("hardhat")
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+describe("Create Voting", function () {
+  it("Should create a new voting with 2 candidates", async function () {
+    const Main = await ethers.getContractFactory("Main")
+    const mainContract = await Main.deploy()
+    await mainContract.deployed()
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    expect(await mainContract.votingId()).to.equal(0)
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+    const block = await ethers.provider.getBlockNumber()
+    const time = (await ethers.provider.getBlock(block)).timestamp
+
+    const createVotingTx = await mainContract.createVoting(
+      "Voting Test 1",
+      "This is a test to deploy a Voting contract",
+      time + 3600,
+      time + 360000,
+      ["Candidate A", "Candidate B"]
+    );
 
     // wait until the transaction is mined
-    await setGreetingTx.wait();
+    await createVotingTx.wait();
 
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    expect(await mainContract.votingId()).to.equal(1);
   });
 });

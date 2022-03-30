@@ -3,11 +3,58 @@ import { Loader } from "rimble-ui"
 import { Link } from "react-router-dom"
 import { ethers } from "ethers"
 import { web3Connect } from "./web3Connect"
+import { formatDate } from "./formatDate"
 import VotingJson from "./artifacts/contracts/Voting.sol/Voting.json"
 import VoteModal from "./voteModal"
 
 // Voting component for organising voting details
 class Voting extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      time: new Date(),
+    }
+    this.timer = null
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(this.setTime.bind(this), 1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
+  setTime() {
+    this.setState({ time: Date.now() })
+  }
+
+  votingState() {
+    if (this.props.voting.hasVoted) {
+      return (
+        <font size="2" color="green">
+          You have voted!
+        </font>
+      )
+    } else if (this.props.voting.votingStart > this.state.time) {
+      return (
+        <font size="2">
+          Not open yet!
+        </font>
+      )
+    } else if (this.props.voting.votingEnd < this.state.time) {
+      return (
+        <font className="text-muted" size="2">
+          Already closed
+        </font>
+      )
+    } else {
+      return (
+        <VoteModal voting={this.props.voting} candidates={this.props.candidates} />
+      )
+    }
+  }
+
   render() {
     return (
       <tr>
@@ -27,14 +74,22 @@ class Voting extends Component {
         <td style={{ textAlign: "center" }}>{this.props.candidateComponent}</td>
 
         <td style={{ textAlign: "center" }}>
-          {!this.props.voting.hasVoted ? (
-            // Vote Modal would be mounted if the user has not voted
-            <VoteModal voting={this.props.voting} candidates={this.props.candidates} />
-          ) : (
-            <font size="2" color="green">
-              You have voted!
+          <div>
+            <font className="text-muted" size="2.5">
+              <b>Start: </b>
+              {formatDate(this.props.voting.votingStart)}
             </font>
-          )}
+          </div>
+          <div>
+            <font className="text-muted" size="2.5">
+              <b>End: </b>
+              {formatDate(this.props.voting.votingEnd)}
+            </font>
+          </div>
+        </td>
+
+        <td style={{ textAlign: "center" }}>
+          {this.votingState()}
         </td>
       </tr>
     )
@@ -88,18 +143,7 @@ class ActiveVotings extends Component {
   loader = false;
 
   componentDidMount() {
-    this.setTime()
     this.init()
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer)
-  }
-
-  setTime() {
-    this.timer = setInterval(() => {
-      this.setState({ time: Date.now() })
-    }, 1000)
   }
 
   async loadData() {
@@ -138,9 +182,9 @@ class ActiveVotings extends Component {
       let bigStart = await VotingContract.start()
       votingDetails[i].votingStart = bigStart.toNumber()
 
+
       // End date of the voting
-      let bigEnd = await VotingContract.end()
-      votingDetails[i].votingEnd = bigEnd.toNumber()
+      votingDetails[i].votingEnd = (await VotingContract.end()).toNumber()
 
       // Voting id
       votingDetails[i].votingId = i
@@ -206,6 +250,7 @@ class ActiveVotings extends Component {
               <th style={{ width: "120px" }}>Voting ID</th>
               <th>Voting Name</th>
               <th style={{ textAlign: "center" }}>Candidates</th>
+              <th style={{ textAlign: "center" }}>Voting Period</th>
               <th style={{ textAlign: "center" }}>Vote</th>
             </tr>
           </thead>

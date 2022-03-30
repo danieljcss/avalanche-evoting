@@ -67,7 +67,12 @@ class Voting extends Component {
           </font>
           <br />
           <font className="text-muted" size="2">
-            {this.props.voting.votingAddress}
+            Contract: <span className="link-address"><a
+              href={`https://testnet.snowtrace.io/address/${this.props.voting.votingAddress}`}
+              target="_blank" rel="noopener noreferrer"
+            >
+              {`${this.props.voting.votingAddress.slice(0, 10)}...`}
+            </a></span>
           </font>
         </td>
 

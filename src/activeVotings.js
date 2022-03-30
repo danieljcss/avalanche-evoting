@@ -58,7 +58,7 @@ class Voting extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.voting.votingId}</td>
+        <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.voting.votingId}</td>
 
         <td>
           {this.props.voting.votingName} <br />
@@ -71,9 +71,9 @@ class Voting extends Component {
           </font>
         </td>
 
-        <td style={{ textAlign: "center" }}>{this.props.candidateComponent}</td>
+        <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.candidateComponent}</td>
 
-        <td style={{ textAlign: "center" }}>
+        <td style={{ textAlign: "center", verticalAlign: "middle" }}>
           <div>
             <font className="text-muted" size="2.5">
               <b>Start: </b>
@@ -88,7 +88,7 @@ class Voting extends Component {
           </div>
         </td>
 
-        <td style={{ textAlign: "center" }}>
+        <td style={{ textAlign: "center", verticalAlign: "middle" }}>
           {this.votingState()}
         </td>
       </tr>
@@ -247,7 +247,7 @@ class ActiveVotings extends Component {
         <table className="table table-hover table-bordered">
           <thead>
             <tr>
-              <th style={{ width: "120px" }}>Voting ID</th>
+              <th style={{ textAlign: "center", width: "60px" }}>ID</th>
               <th>Voting Name</th>
               <th style={{ textAlign: "center" }}>Candidates</th>
               <th style={{ textAlign: "center" }}>Voting Period</th>

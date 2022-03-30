@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { web3Connect } from "./web3Connect"
+import { Form, Field, Input, Button, Textarea } from 'rimble-ui'
 
 class CreateVoting extends Component {
   constructor(props) {
@@ -120,88 +121,92 @@ class CreateVoting extends Component {
         <h3>Create New Voting</h3>
 
         {/* New Voting Form */}
-        <form onSubmit={e => this.onSubmit(e)}>
-          <div className="form-group">
-            <label>Name</label>
-            <input
+        <Form onSubmit={e => this.onSubmit(e)}>
+          <Field className="form-group" label="Name">
+            <Input
               type="text"
               required
               className="form-control"
               placeholder="Enter voting name"
               onChange={e => this.onChangeVotingName(e)}
             />
+          </Field>
+
+          <div className="form-group">
+            <Field label="Description">
+              <Textarea
+                type="text"
+                required
+                className="form-control"
+                placeholder="Describe your Voting here"
+                onChange={e => this.onChangeDescription(e)}
+              ></Textarea>
+            </Field>
           </div>
 
           <div className="form-group">
-            <label>Description</label>
-            <textarea
-              type="text"
-              required
-              className="form-control"
-              placeholder="Describe your Voting here"
-              onChange={e => this.onChangeDescription(e)}
-            ></textarea>
+            <Field label="Start date">
+              <Input
+                type="datetime-local"
+                required
+                className="form-control date"
+                min={this.state.date}
+                value={this.state.start}
+                onChange={e => this.onChangeStart(e)}
+              ></Input>
+            </Field>
           </div>
 
           <div className="form-group">
-            <label>Start date</label>
-            <input
-              type="datetime-local"
-              required
-              className="form-control date"
-              min={this.state.date}
-              value={this.state.start}
-              onChange={e => this.onChangeStart(e)}
-            ></input>
-          </div>
-
-          <div className="form-group">
-            <label>End date</label>
-            <input
-              type="datetime-local"
-              required
-              className="form-control date"
-              min={this.state.start}
-              value={this.state.end}
-              onChange={e => this.onChangeEnd(e)}
-            ></input>
+            <Field label="End date">
+              <Input
+                type="datetime-local"
+                required
+                className="form-control date"
+                min={this.state.start}
+                value={this.state.end}
+                onChange={e => this.onChangeEnd(e)}
+              ></Input>
+            </Field>
           </div>
 
           <div id="1" className="form-group">
-            <label>Candidate 1</label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              placeholder="Candidate Name"
-              onChange={e => this.onChangeCandidate(e, 1)}
-            />
+            <Field label="Candidate 1">
+              <Input
+                type="text"
+                required
+                className="form-control"
+                placeholder="Candidate Name"
+                onChange={e => this.onChangeCandidate(e, 1)}
+              />
+            </Field>
 
             <br />
-            <label>Candidate 2</label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              placeholder="Candidate Name"
-              onChange={e => this.onChangeCandidate(e, 2)}
-            />
+            <Field label="Candidate 2">
+              <Input
+                type="text"
+                required
+                className="form-control"
+                placeholder="Candidate Name"
+                onChange={e => this.onChangeCandidate(e, 2)}
+              />
+            </Field>
           </div>
 
           <br />
 
           <div>
-            <button
+            <Button
               className="btn btn-danger grid-item"
               style={{ width: 100 }}
               type="submit"
             >
               Submit
-            </button>
+            </Button>
           </div>
 
           <br />
-        </form>
+        </Form>
       </div>
     )
   }

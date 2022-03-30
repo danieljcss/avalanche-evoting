@@ -78,7 +78,7 @@ class Navbar extends Component {
 
         {/* Account address on the right side of the navbar  */}
         <div className="col-4">
-          <div id="address" className="d-flex justify-content-end">
+          <div id="address-nav" className="d-flex justify-content-end link-address">
             <a
               href={`https://testnet.snowtrace.io/address/${this.props.account}`}
               target="_blank" rel="noopener noreferrer"

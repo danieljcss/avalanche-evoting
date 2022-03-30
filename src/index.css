@@ -38,3 +38,44 @@ code {
 #address a {
   color: white;
 }
+
+#new-voting-card {
+  max-width: 90%;
+  margin: 0 5%;
+}
+
+.input-new-voting {
+  width: 100%;
+}
+
+.field-new-voting {
+  width: 90%;
+  margin: 0 5%;
+}
+
+.date-new-voting {
+  width: 100%;
+}
+
+.button-new-voting {
+  margin-right: 5%;
+  margin-bottom: 25pt;
+  float: right;
+}
+
+@media only screen and (min-width: 700px) {
+  #new-voting-card {
+    max-width: calc(500px + 20%);
+    margin: 0 auto;
+  }
+  .date-start {
+    width: 44%;
+    margin-left: 5%;
+    margin-right: 1%;
+  }
+  .date-end {
+    width: 44%;
+    margin-left: 1%;
+    margin-right: 5%;
+  }
+}

@@ -117,90 +117,82 @@ class CreateVoting extends Component {
 
   render() {
     return (
-      <div className="container card">
-        <h3>Create New Voting</h3>
+      <div id="new-voting-card" className="container card">
+        <h3 style={{ textAlign: "center", marginTop: "25pt" }}>Create New Voting</h3>
 
         {/* New Voting Form */}
         <Form onSubmit={e => this.onSubmit(e)}>
-          <Field className="form-group" label="Name">
+          <Field label="Name" className="field-new-voting">
             <Input
               type="text"
               required
-              className="form-control"
               placeholder="Enter voting name"
               onChange={e => this.onChangeVotingName(e)}
+              className="input-new-voting"
             />
           </Field>
 
-          <div className="form-group">
-            <Field label="Description">
+          <div>
+            <Field label="Description" className="field-new-voting">
               <Textarea
-                type="text"
+                rows={2}
                 required
-                className="form-control"
+                type="text"
+                resize="vertical"
                 placeholder="Describe your Voting here"
                 onChange={e => this.onChangeDescription(e)}
-              ></Textarea>
+                className="input-new-voting"
+              />
             </Field>
           </div>
+          <Field label="Start date" className="field-new-voting date-start">
+            <Input
+              type="datetime-local"
+              required
+              min={this.state.date}
+              value={this.state.start}
+              onChange={e => this.onChangeStart(e)}
+              className="date-new-voting"
+            ></Input>
+          </Field>
+          <Field label="End date" className="field-new-voting date-end">
+            <Input
+              type="datetime-local"
+              required
+              min={this.state.start}
+              value={this.state.end}
+              onChange={e => this.onChangeEnd(e)}
+              className="date-new-voting"
+            ></Input>
+          </Field>
 
-          <div className="form-group">
-            <Field label="Start date">
-              <Input
-                type="datetime-local"
-                required
-                className="form-control date"
-                min={this.state.date}
-                value={this.state.start}
-                onChange={e => this.onChangeStart(e)}
-              ></Input>
-            </Field>
-          </div>
-
-          <div className="form-group">
-            <Field label="End date">
-              <Input
-                type="datetime-local"
-                required
-                className="form-control date"
-                min={this.state.start}
-                value={this.state.end}
-                onChange={e => this.onChangeEnd(e)}
-              ></Input>
-            </Field>
-          </div>
-
-          <div id="1" className="form-group">
-            <Field label="Candidate 1">
+          <div id="1">
+            <Field label="Candidate 1" className="field-new-voting">
               <Input
                 type="text"
                 required
-                className="form-control"
                 placeholder="Candidate Name"
                 onChange={e => this.onChangeCandidate(e, 1)}
+                className="input-new-voting"
               />
             </Field>
 
             <br />
-            <Field label="Candidate 2">
+            <Field label="Candidate 2" className="field-new-voting">
               <Input
                 type="text"
                 required
-                className="form-control"
                 placeholder="Candidate Name"
                 onChange={e => this.onChangeCandidate(e, 2)}
+                className="input-new-voting"
               />
             </Field>
           </div>
 
           <br />
 
-          <div>
-            <Button
-              className="btn btn-danger grid-item"
-              style={{ width: 100 }}
-              type="submit"
-            >
+          <div className="button-new-voting">
+            <Button type="submit">
               Submit
             </Button>
           </div>

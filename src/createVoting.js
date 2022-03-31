@@ -2,6 +2,22 @@ import React, { Component } from "react";
 import { web3Connect } from "./web3Connect"
 import { Form, Field, Input, Button, Textarea } from 'rimble-ui'
 
+class Candidate extends Component {
+  render() {
+    return (
+      <Field label={`Candidate ${this.props.number}`} className="field-new-voting">
+        <Input
+          type="text"
+          required
+          placeholder="Candidate Name"
+          onChange={e => this.props.change(e, this.props.number)}
+          className="input-new-voting"
+        />
+      </Field>
+    )
+  }
+}
+
 class CreateVoting extends Component {
   constructor(props) {
     super(props)
@@ -9,15 +25,18 @@ class CreateVoting extends Component {
     this.state = {
       votingname: "",
       description: "",
-      date: "",
-      start: "",
-      end: "",
-      ncandidates: 2,
+      date: "1970-01-01",
+      start: "1970-01-01",
+      end: "1970-01-01",
+      ncandidates: 0,
       candidates: [],
+      candidatesComponents: [],
       account: "",
       mainInstance: null,
       provider: null
     }
+
+    this.timer = null
   }
 
   // Connect application to Metamask and create instance of smart contract
@@ -38,6 +57,8 @@ class CreateVoting extends Component {
   componentDidMount() {
     this.init()
     this.setFormattedDates()
+    this.setInitialCandidates()
+    this.timer = setInterval(() => this.setFormattedDates(), 1000)
   }
 
   onChangeVotingName(e) {
@@ -77,16 +98,49 @@ class CreateVoting extends Component {
     })
   }
 
+  setInitialCandidates() {
+    this.setState({
+      ncandidates: 2,
+      candidatesComponents: [
+        <Candidate key={1} number={1} change={this.onChangeCandidate.bind(this)} />,
+        <Candidate key={2} number={2} change={this.onChangeCandidate.bind(this)} />
+      ],
+    })
+  }
+  addCandidate(e) {
+    e.preventDefault()
+    const newNcandidates = this.state.ncandidates + 1
+    let candidatesComp = this.state.candidatesComponents.concat(<Candidate key={newNcandidates} number={newNcandidates} change={this.onChangeCandidate.bind(this)} />)
+    this.setState({
+      ncandidates: newNcandidates,
+      candidatesComponents: candidatesComp,
+    })
+  }
+
+  removeCandidate(e) {
+    e.preventDefault()
+    const newNcandidates = this.state.ncandidates - 1
+    let candidatesComp = this.state.candidatesComponents.slice(0, -1)
+    this.setState({
+      ncandidates: newNcandidates,
+      candidatesComponents: candidatesComp,
+    })
+  }
+
   setFormattedDates() {
     const date = new Date()
     const offset = date.getTimezoneOffset()
-    const localDate = new Date(date.getTime() - (offset * 60 * 1000))
+    const localDate = new Date(date.getTime() - (offset * 60 * 1000) + 60000)
     const formattedDate = localDate.toISOString().split(".")[0].slice(0, -3)
     this.setState({
       date: formattedDate,
       start: formattedDate,
-      end: formattedDate,
     })
+    if (localDate >= Date.parse(this.state.end)) {
+      this.setState({
+        end: formattedDate,
+      })
+    }
   }
 
   // Function to be called when the form is submitted
@@ -166,31 +220,17 @@ class CreateVoting extends Component {
             ></Input>
           </Field>
 
-          <div id="1">
-            <Field label="Candidate 1" className="field-new-voting">
-              <Input
-                type="text"
-                required
-                placeholder="Candidate Name"
-                onChange={e => this.onChangeCandidate(e, 1)}
-                className="input-new-voting"
-              />
-            </Field>
+          {this.state.candidatesComponents}
+          <div className="d-flex justify-content-center">
+            <div className="button-add-candidate">
+              <Button.Outline onClick={e => this.addCandidate(e)}>+</Button.Outline>
+            </div>
 
-            <br />
-            <Field label="Candidate 2" className="field-new-voting">
-              <Input
-                type="text"
-                required
-                placeholder="Candidate Name"
-                onChange={e => this.onChangeCandidate(e, 2)}
-                className="input-new-voting"
-              />
-            </Field>
+            {this.state.ncandidates > 2 ? (
+              <div className="button-remove-candidate">
+                <Button.Outline onClick={e => this.removeCandidate(e)}>-</Button.Outline>
+              </div>) : null}
           </div>
-
-          <br />
-
           <div className="button-new-voting">
             <Button type="submit">
               Submit

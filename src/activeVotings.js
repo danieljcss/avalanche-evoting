@@ -67,12 +67,13 @@ class Voting extends Component {
           </font>
           <br />
           <font className="text-muted" size="2">
-            Contract: <span className="link-address"><a
-              href={`https://testnet.snowtrace.io/address/${this.props.voting.votingAddress}`}
-              target="_blank" rel="noopener noreferrer"
-            >
-              {`${this.props.voting.votingAddress.slice(0, 10)}...`}
-            </a></span>
+            Contract: <span className="link-address active-votings">
+              <a href={`https://testnet.snowtrace.io/address/${this.props.voting.votingAddress}`}
+                target="_blank" rel="noopener noreferrer"
+              >
+                {`${this.props.voting.votingAddress.slice(0, 10)}...`}
+              </a>
+            </span>
           </font>
         </td>
 
@@ -235,15 +236,16 @@ class ActiveVotings extends Component {
       <div className="container">
         <div style={{ float: "right", marginBottom: "10px" }}>
           <img
-            style={{ width: "25px", marginRight: "20px", cursor: "pointer" }}
+            className="icons"
+            style={{ marginRight: "20px" }}
             alt=""
             onClick={e => this.loadData(e)}
-            src="https://img.icons8.com/color/50/000000/synchronize.png"
+            src="./synchronise.svg"
           />
           <Link to="/createVoting">
             <img
-              style={{ width: "25px", cursor: "pointer" }}
-              src="https://img.icons8.com/color/48/000000/plus-math.png"
+              className="icons"
+              src="./plus.svg"
               alt=""
             />
           </Link>

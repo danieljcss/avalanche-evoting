@@ -12,6 +12,8 @@ code {
     monospace;
 }
 
+/* Navbar Styles*/
+
 #navbar {
   background-color: #1b2021;
   height: 100px;
@@ -39,9 +41,28 @@ code {
   color: white;
 }
 
+/* Active Votings page */
+
+.active-votings a {
+  color: #006ba6;
+}
+
+.icons {
+  width: 25px;
+  cursor: pointer;
+}
+
+.icons:hover {
+  opacity: 80%;
+}
+
+/* Create Voting page Styles*/
+
 #new-voting-card {
   max-width: 90%;
-  margin: 0 5%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 50px;
 }
 
 .input-new-voting {
@@ -56,9 +77,14 @@ code {
 .date-new-voting {
   width: 100%;
 }
-.button-add-candidate {
-  margin-left: 10px;
-  margin-right: 10px;
+.button-add-candidate,
+.button-remove-candidate {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.button-candidates {
+  margin-bottom: 30px;
 }
 
 .button-add-candidate button,
@@ -71,15 +97,22 @@ code {
 }
 
 .button-new-voting {
-  margin-right: 5%;
-  margin-bottom: 25pt;
-  float: right;
+  margin: 0 5%;
+}
+
+.button-new-voting button {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 40%;
 }
 
 @media only screen and (min-width: 700px) {
   #new-voting-card {
     max-width: calc(500px + 20%);
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
   }
   .date-start {
     width: 44%;
@@ -90,5 +123,14 @@ code {
     width: 44%;
     margin-left: 1%;
     margin-right: 5%;
+  }
+
+  .button-new-voting {
+    margin-right: 5%;
+    margin-bottom: 15pt;
+    float: right;
+  }
+  .button-new-voting button {
+    width: 100%;
   }
 }

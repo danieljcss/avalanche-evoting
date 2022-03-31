@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { web3Connect } from "./web3Connect"
-import { Form, Field, Input, Button, Textarea } from 'rimble-ui'
+import { Card, Form, Field, Input, Button, Textarea } from 'rimble-ui'
 
 class Candidate extends Component {
   render() {
@@ -171,8 +171,8 @@ class CreateVoting extends Component {
 
   render() {
     return (
-      <div id="new-voting-card" className="container card">
-        <h3 style={{ textAlign: "center", marginTop: "25pt" }}>Create New Voting</h3>
+      <Card id="new-voting-card" className="card">
+        <h3 style={{ textAlign: "center", marginTop: "15pt" }}>Create New Voting</h3>
 
         {/* New Voting Form */}
         <Form onSubmit={e => this.onSubmit(e)}>
@@ -221,7 +221,7 @@ class CreateVoting extends Component {
           </Field>
 
           {this.state.candidatesComponents}
-          <div className="d-flex justify-content-center">
+          <div className="button-candidates d-flex justify-content-center">
             <div className="button-add-candidate">
               <Button.Outline onClick={e => this.addCandidate(e)}>+</Button.Outline>
             </div>
@@ -239,7 +239,7 @@ class CreateVoting extends Component {
 
           <br />
         </Form>
-      </div>
+      </Card>
     )
   }
 }

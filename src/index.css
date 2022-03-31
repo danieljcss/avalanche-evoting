@@ -30,12 +30,12 @@ code {
 }
 
 #logo-title a:hover,
-#address a:hover {
+.link-address a:hover {
   opacity: 90%;
   text-decoration: none;
 }
 
-#address a {
+#address-nav a {
   color: white;
 }
 
@@ -55,6 +55,19 @@ code {
 
 .date-new-voting {
   width: 100%;
+}
+.button-add-candidate {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.button-add-candidate button,
+.button-remove-candidate button {
+  min-width: 35px;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  padding: 0;
 }
 
 .button-new-voting {

@@ -81,7 +81,7 @@ function VoteModal(props) {
                             <fieldset>
                                 <legend>
                                     <b style={{ fontSize: "12pt" }}>
-                                        Choose candidate from below
+                                        Choose one candidate from below
                                     </b>
                                 </legend>
                                 {candid}

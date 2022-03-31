@@ -39,7 +39,7 @@ class Voting extends Component {
     } else if (this.props.voting.votingStart > this.state.time) {
       return (
         <font size="2">
-          Not open yet!
+          Not open yet
         </font>
       )
     } else if (this.props.voting.votingEnd < this.state.time) {

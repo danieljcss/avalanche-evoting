@@ -68,7 +68,7 @@ class Navbar extends Component {
       >
         {/* Logo and Title  */}
         <div className="col-8 align-middle">
-          <img src="/logo.svg" alt="" height="50px" width="50px" id="logo" className="inline-block align-middle" />
+          <img src="/logoAV.svg" alt="" height="50px" width="50px" id="logo" className="inline-block align-middle" />
           <span className="inline-block align-middle" id="logo-title">
             <Link to="/active" >
               Avalanche Votings

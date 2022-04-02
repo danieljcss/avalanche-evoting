@@ -2,9 +2,9 @@ import React, { Component } from "react"
 import { Loader } from "rimble-ui"
 import { Link } from "react-router-dom"
 import { ethers } from "ethers"
-import { web3Connect } from "./web3Connect"
-import { formatDate } from "./formatDate"
-import VotingJson from "./artifacts/contracts/Voting.sol/Voting.json"
+import { web3Connect } from "../utils/web3Connect"
+import { formatDate } from "../utils/formatDate"
+import VotingJson from "../artifacts/contracts/Voting.sol/Voting.json"
 import VoteModal from "./voteModal"
 
 // Voting component for organising voting details

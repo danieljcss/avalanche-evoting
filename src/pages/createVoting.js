@@ -140,6 +140,7 @@ class CreateVoting extends Component {
       ncandidates: newNcandidates,
       candidatesComponents: candidatesComp,
     })
+    this.scrollTop()
   }
 
   removeCandidate(e) {
@@ -152,7 +153,10 @@ class CreateVoting extends Component {
     })
   }
 
-
+  scrollTop() {
+    const scrollingElement = document.getElementById("new-voting-card")
+    scrollingElement.scrollTop = scrollingElement.scrollHeight
+  }
 
   // Function to be called when the form is submitted
   async onSubmit(e) {

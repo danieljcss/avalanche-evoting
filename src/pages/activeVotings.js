@@ -151,7 +151,15 @@ class ActiveVotings extends Component {
     this.init()
   }
 
+  scroll() {
+    const scrollingElement = (document.scrollingElement || document.body)
+    scrollingElement.scrollTop = scrollingElement.scrollHeight + 40
+  }
+
   async loadData() {
+    // Scroll to bottom of the page
+    this.scroll()
+
     this.setState({ loading: true })
 
     // votingId maps to total votings created

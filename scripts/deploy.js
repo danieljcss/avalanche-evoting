@@ -8,7 +8,7 @@ async function main() {
   await mainContract.deployed()
   console.log("Main contract deployed to:", mainContract.address);
 
-  fs.writeFileSync('./src/contractAddress.js', `
+  fs.writeFileSync('./src/utils/contractAddress.js', `
   export const mainAddress = "${mainContract.address}" \n
   `)
 }

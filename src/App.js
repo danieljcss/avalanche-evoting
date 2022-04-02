@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import { web3Connect } from './utils/web3Connect'
 import { Routes, Route, Link } from "react-router-dom"
-import CreateVoting from "./pages/createVoting"
 import ActiveVotings from "./pages/activeVotings"
 
 

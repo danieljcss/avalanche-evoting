@@ -158,12 +158,16 @@ class CreateVoting extends Component {
   async onSubmit(e) {
     e.preventDefault()
 
+    // Parsing dates back to miliseconds from 01-01-1970
+    const startParsed = Date.parse(this.state.start) / 1000
+    const endParsed = Date.parse(this.state.end) / 1000
+
     // Structuring voting details from the form before submitting transaction to the smart-contract
     const votingDetails = {
       votingname: this.state.votingname,
       description: this.state.description,
-      start: Date.parse(this.state.start),
-      end: Date.parse(this.state.end),
+      start: startParsed,
+      end: endParsed,
       candidates: this.state.candidates,
     }
 

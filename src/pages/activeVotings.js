@@ -120,7 +120,7 @@ class ActiveVotings extends Component {
     this.state = {
       data: [],
       loading: false,
-      account: "",
+      account: null,
       mainInstance: null,
       provider: null,
       time: 0,
@@ -133,7 +133,7 @@ class ActiveVotings extends Component {
   async init() {
     try {
       const connect = await web3Connect()
-      const account = await connect.account.getAddress()
+      const account = connect.account
       this.setState({
         account: account,
         mainInstance: connect.contract,
@@ -176,7 +176,7 @@ class ActiveVotings extends Component {
       votingDetails[i].votingAddress = votings[i]
 
       // Boolean indicating wether the contract address has voted or not
-      votingDetails[i].hasVoted = await VotingContract.voters(this.state.account)
+      votingDetails[i].hasVoted = await VotingContract.voters(this.state.account.getAddress())
 
       // Name of the voting
       votingDetails[i].votingName = await VotingContract.name()
@@ -184,13 +184,11 @@ class ActiveVotings extends Component {
       // Description of the voting
       votingDetails[i].votingDescription = await VotingContract.description()
 
-      // Start date of the voting
-      let bigStart = await VotingContract.start()
-      votingDetails[i].votingStart = bigStart.toNumber()
+      // Start date of the voting in ms
+      votingDetails[i].votingStart = (await VotingContract.start()).toNumber() * 1000
 
-
-      // End date of the voting
-      votingDetails[i].votingEnd = (await VotingContract.end()).toNumber()
+      // End date of the voting in ms
+      votingDetails[i].votingEnd = (await VotingContract.end()).toNumber() * 1000
 
       // Voting id
       votingDetails[i].votingId = i

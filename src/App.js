@@ -37,20 +37,9 @@ class App extends Component {
         <Navbar account={this.state.account} />
         {/*For routing through the react application*/}
         <Routes>
-          {/* Default route to ActiveVotings component 
-          <Route path="/" exact>
-            <Route path="/active" element={<ActiveVotings account={this.state.account} />
-          </Route>*/}
-
-          {/* Route to CreateVoting page */}
-          <Route
-            path="/createVoting"
-            element={<CreateVoting account={this.state.account} />}
-          />
-
           {/* Route to Active voting page */}
           <Route
-            path="/active"
+            path="/"
             element={<ActiveVotings account={this.state.account} />}
           />
         </Routes>
@@ -70,7 +59,7 @@ class Navbar extends Component {
         <div className="col-8 align-middle">
           <img src="/logoAV.svg" alt="" height="50px" width="50px" id="logo" className="inline-block align-middle" />
           <span className="inline-block align-middle" id="logo-title">
-            <Link to="/active" >
+            <Link to="/" >
               Avalanche Votings
             </Link>
           </span>

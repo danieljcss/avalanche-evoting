@@ -1,11 +1,11 @@
 import React, { Component } from "react"
 import { Loader } from "rimble-ui"
-import { Link } from "react-router-dom"
 import { ethers } from "ethers"
 import { web3Connect } from "../utils/web3Connect"
 import { formatDate } from "../utils/formatDate"
 import VotingJson from "../artifacts/contracts/Voting.sol/Voting.json"
 import VoteModal from "./voteModal"
+import CreateVoting from "./createVoting"
 
 // Voting component for organising voting details
 class Voting extends Component {
@@ -133,9 +133,8 @@ class ActiveVotings extends Component {
   async init() {
     try {
       const connect = await web3Connect()
-      const account = connect.account
       this.setState({
-        account: account,
+        account: connect.account,
         mainInstance: connect.contract,
         provider: connect.provider,
       })
@@ -231,22 +230,16 @@ class ActiveVotings extends Component {
   render() {
     return (
       // Simple container to store table with voting data
-      <div className="container">
-        <div style={{ float: "right", marginBottom: "10px" }}>
+      <div className="container pb-5">
+        <div style={{ display: "flex", float: "right", marginBottom: "10px" }}>
           <img
             className="icons"
-            style={{ marginRight: "20px" }}
+            style={{ marginRight: "10px" }}
             alt=""
             onClick={e => this.loadData(e)}
             src="./synchronise.svg"
           />
-          <Link to="/createVoting">
-            <img
-              className="icons"
-              src="./plus.svg"
-              alt=""
-            />
-          </Link>
+          <CreateVoting account={this.state.account} mainInstance={this.state.mainInstance} provider={this.state.provider} />
         </div>
 
         <table className="table table-hover table-bordered">

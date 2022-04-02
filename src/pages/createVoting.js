@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { web3Connect } from "../utils/web3Connect"
-import { Card, Form, Field, Input, Button, Textarea } from 'rimble-ui'
+import { Box, Button, Card, Form, Field, Input, Modal, Textarea } from 'rimble-ui'
 
 class Candidate extends Component {
   render() {
@@ -31,9 +31,7 @@ class CreateVoting extends Component {
       ncandidates: 0,
       candidates: [],
       candidatesComponents: [],
-      account: "",
-      mainInstance: null,
-      provider: null
+      isOpen: false
     }
 
     this.timer = null
@@ -41,28 +39,31 @@ class CreateVoting extends Component {
 
   // Connect application to Metamask and create instance of smart contract
   async init() {
-    try {
-      const connect = await web3Connect()
-      const account = await connect.account.getAddress()
-      this.setState({
-        account: account,
-        mainInstance: connect.contract,
-        provider: connect.provider,
-      })
-    } catch (error) {
-      console.log('Wallet connection failed: ', error)
-    }
-  }
-
-  componentDidMount() {
-    this.init()
     this.setFormattedDates()
     this.setInitialCandidates()
     this.timer = setInterval(() => this.setFormattedDates(), 1000)
   }
 
+  componentDidMount() {
+    this.init()
+  }
+
   componentWillUnmount() {
     clearInterval(this.timer)
+  }
+
+  openModal(e) {
+    e.preventDefault()
+    this.setState({
+      isOpen: true
+    })
+  }
+
+  closeModal(e) {
+    e.preventDefault()
+    this.setState({
+      isOpen: false
+    })
   }
 
   onChangeVotingName(e) {
@@ -172,89 +173,116 @@ class CreateVoting extends Component {
     }
 
     // Making transaction to the Main contract instance, for creating a new voting
-    await this.state.mainInstance.createVoting(
+    await this.props.mainInstance.createVoting(
       votingDetails.votingname,
       votingDetails.description,
       votingDetails.start,
       votingDetails.end,
       votingDetails.candidates,
-      { from: this.state.account }
+      { from: this.props.account.getAddress() }
     )
 
-    window.location = "/active";
+    this.closeModal();
   }
 
   render() {
     return (
-      <Card id="new-voting-card" className="card">
-        <h3 style={{ textAlign: "center", marginTop: "15pt" }}>Create New Voting</h3>
+      <Box p={0}>
+        <Box>
+          <img
+            className="icons"
+            src="./plus.svg"
+            alt=""
+            onClick={e => this.openModal(e)}
+          />
+          <Modal isOpen={this.state.isOpen} >
+            <Card id="new-voting-card" className="card scroll">
 
-        {/* New Voting Form */}
-        <Form onSubmit={e => this.onSubmit(e)}>
-          <Field label="Name" className="field-new-voting">
-            <Input
-              type="text"
-              required
-              placeholder="Enter voting name"
-              onChange={e => this.onChangeVotingName(e)}
-              className="input-new-voting"
-            />
-          </Field>
-
-          <div>
-            <Field label="Description" className="field-new-voting">
-              <Textarea
-                rows={2}
-                required
-                type="text"
-                resize="vertical"
-                placeholder="Describe your Voting here"
-                onChange={e => this.onChangeDescription(e)}
-                className="input-new-voting"
+              {/* Close icon to close the modal */}
+              <Button.Text
+                icononly
+                icon={"Close"}
+                mainColor={'#006BA6'}
+                color={"moon-gray"}
+                position={"absolute"}
+                top={0}
+                right={0}
+                mt={3}
+                mr={3}
+                onClick={e => this.closeModal(e)}
               />
-            </Field>
-          </div>
-          <Field label="Start date" className="field-new-voting date-start">
-            <Input
-              type="datetime-local"
-              required
-              min={this.state.date}
-              value={this.state.start}
-              onChange={e => this.onChangeStart(e)}
-              className="date-new-voting"
-            ></Input>
-          </Field>
-          <Field label="End date" className="field-new-voting date-end">
-            <Input
-              type="datetime-local"
-              required
-              min={this.state.start}
-              value={this.state.end}
-              onChange={e => this.onChangeEnd(e)}
-              className="date-new-voting"
-            ></Input>
-          </Field>
 
-          {this.state.candidatesComponents}
-          <div className="button-candidates d-flex justify-content-center">
-            <div className="button-add-candidate">
-              <Button.Outline onClick={e => this.addCandidate(e)}>+</Button.Outline>
-            </div>
+              <h3 style={{ textAlign: "center", marginTop: "15pt" }}>Create New Voting</h3>
 
-            {this.state.ncandidates > 2 ? (
-              <div className="button-remove-candidate">
-                <Button.Outline onClick={e => this.removeCandidate(e)}>-</Button.Outline>
-              </div>) : null}
-          </div>
-          <div className="button-new-voting">
-            <Button type="submit">
-              Submit
-            </Button>
-          </div>
+              {/* New Voting Form */}
+              <Form onSubmit={e => this.onSubmit(e)}>
+                <Field label="Name" className="field-new-voting">
+                  <Input
+                    type="text"
+                    required
+                    placeholder="Enter voting name"
+                    onChange={e => this.onChangeVotingName(e)}
+                    className="input-new-voting"
+                  />
+                </Field>
 
-          <br />
-        </Form>
-      </Card>
+                <div>
+                  <Field label="Description" className="field-new-voting">
+                    <Textarea
+                      rows={2}
+                      required
+                      type="text"
+                      resize="vertical"
+                      placeholder="Describe your Voting here"
+                      onChange={e => this.onChangeDescription(e)}
+                      className="input-new-voting"
+                    />
+                  </Field>
+                </div>
+                <Field label="Start date" className="field-new-voting date-start">
+                  <Input
+                    type="datetime-local"
+                    required
+                    min={this.state.date}
+                    value={this.state.start}
+                    onChange={e => this.onChangeStart(e)}
+                    className="date-new-voting"
+                  ></Input>
+                </Field>
+                <Field label="End date" className="field-new-voting date-end">
+                  <Input
+                    type="datetime-local"
+                    required
+                    min={this.state.start}
+                    value={this.state.end}
+                    onChange={e => this.onChangeEnd(e)}
+                    className="date-new-voting"
+                  ></Input>
+                </Field>
+
+                {this.state.candidatesComponents}
+                <div className="button-candidates d-flex justify-content-center">
+                  <div className="button-add-candidate">
+                    <Button.Outline onClick={e => this.addCandidate(e)}>+</Button.Outline>
+                  </div>
+
+                  {this.state.ncandidates > 2 ? (
+                    <div className="button-remove-candidate">
+                      <Button.Outline onClick={e => this.removeCandidate(e)}>-</Button.Outline>
+                    </div>) : null}
+                </div>
+                <div className="button-new-voting">
+                  <Button type="submit">
+                    Submit
+                  </Button>
+                </div>
+
+                <br />
+              </Form>
+            </Card>
+          </Modal>
+        </Box>
+      </Box>
     )
   }
 }

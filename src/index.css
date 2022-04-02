@@ -58,8 +58,14 @@ code {
 
 /* Create Voting page Styles*/
 
+.scroll {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 #new-voting-card {
   max-width: 90%;
+  margin-top: 5vh;
   margin-left: 5%;
   margin-right: 5%;
   margin-bottom: 50px;

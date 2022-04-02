@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { web3Connect } from "../utils/web3Connect"
 import { Box, Button, Card, Form, Field, Input, Modal, Textarea } from 'rimble-ui'
 
 class Candidate extends Component {
@@ -98,7 +97,7 @@ class CreateVoting extends Component {
   setFormattedDates() {
     const date = new Date()
     const offset = date.getTimezoneOffset()
-    const localDate = new Date(date.getTime() - (offset * 60 * 1000) + 60000)
+    const localDate = new Date(date.getTime() - (offset * 60 * 1000) + 2 * 60 * 1000)// extra 2 minutes for network delay
     const formattedDate = localDate.toISOString().split(".")[0].slice(0, -3)
     this.setState({
       date: formattedDate,

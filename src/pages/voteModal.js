@@ -30,6 +30,7 @@ function VoteModal(props) {
         let signedContract = await props.voting.contractInstance.connect(props.voting.account)
         await signedContract.vote(candidateId)
         isLoading(false)
+        setIsOpen(false)
     };
 
     let candid = [],
@@ -53,14 +54,14 @@ function VoteModal(props) {
 
     return (
         // This is a rimble-ui builtin modal for triggering vote() function
-        <Box className="App" p={0}>
+        <Box p={0}>
             <Box>
                 <Button onClick={openModal}>
                     Vote
                 </Button>
 
                 <Modal isOpen={isOpen}>
-                    <Card width={"540px"} p={0}>
+                    <Card width={"540px"} p={0} className="card">
                         {/* Close icon to close the modal */}
                         <Button.Text
                             icononly

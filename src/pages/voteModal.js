@@ -60,7 +60,7 @@ function VoteModal(props) {
                 </Button>
 
                 <Modal isOpen={isOpen}>
-                    <Card width={"420px"} p={0}>
+                    <Card width={"540px"} p={0}>
                         {/* Close icon to close the modal */}
                         <Button.Text
                             icononly
@@ -77,7 +77,7 @@ function VoteModal(props) {
 
                         {/* List of candidates with their vote count */}
                         <Box p={4} mb={3}>
-                            <h3>{props.voting.votingName}</h3>
+                            <h4 style={{ marginRight: "2rem" }}>{props.voting.votingName}</h4>
                             <fieldset>
                                 <legend>
                                     <b style={{ fontSize: "12pt" }}>

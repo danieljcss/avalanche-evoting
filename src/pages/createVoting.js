@@ -61,6 +61,10 @@ class CreateVoting extends Component {
     this.timer = setInterval(() => this.setFormattedDates(), 1000)
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
   onChangeVotingName(e) {
     this.setState({
       votingname: e.target.value,
@@ -90,12 +94,24 @@ class CreateVoting extends Component {
     })
   }
 
-  onChangeCandidate(e, n) {
-    let candidatesList = this.state.candidates
-    candidatesList[n - 1] = e.target.value
+  setFormattedDates() {
+    const date = new Date()
+    const offset = date.getTimezoneOffset()
+    const localDate = new Date(date.getTime() - (offset * 60 * 1000) + 60000)
+    const formattedDate = localDate.toISOString().split(".")[0].slice(0, -3)
     this.setState({
-      candidates: candidatesList,
+      date: formattedDate,
     })
+    if (date.getTime() > Date.parse(this.state.start)) {
+      this.setState({
+        start: formattedDate,
+      })
+    }
+    if (date.getTime() > Date.parse(this.state.end)) {
+      this.setState({
+        end: formattedDate,
+      })
+    }
   }
 
   setInitialCandidates() {
@@ -107,6 +123,15 @@ class CreateVoting extends Component {
       ],
     })
   }
+
+  onChangeCandidate(e, n) {
+    let candidatesList = this.state.candidates
+    candidatesList[n - 1] = e.target.value
+    this.setState({
+      candidates: candidatesList,
+    })
+  }
+
   addCandidate(e) {
     e.preventDefault()
     const newNcandidates = this.state.ncandidates + 1
@@ -127,21 +152,7 @@ class CreateVoting extends Component {
     })
   }
 
-  setFormattedDates() {
-    const date = new Date()
-    const offset = date.getTimezoneOffset()
-    const localDate = new Date(date.getTime() - (offset * 60 * 1000) + 60000)
-    const formattedDate = localDate.toISOString().split(".")[0].slice(0, -3)
-    this.setState({
-      date: formattedDate,
-      start: formattedDate,
-    })
-    if (localDate >= Date.parse(this.state.end)) {
-      this.setState({
-        end: formattedDate,
-      })
-    }
-  }
+
 
   // Function to be called when the form is submitted
   async onSubmit(e) {

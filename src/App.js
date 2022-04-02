@@ -1,8 +1,8 @@
 import React, { Component } from "react"
-import { web3Connect } from './web3Connect'
+import { web3Connect } from './utils/web3Connect'
 import { Routes, Route, Link } from "react-router-dom"
-import CreateVoting from "./createVoting"
-import ActiveVotings from "./activeVotings"
+import CreateVoting from "./pages/createVoting"
+import ActiveVotings from "./pages/activeVotings"
 
 
 class App extends Component {

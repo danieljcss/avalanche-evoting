@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
 import contractJson from '../artifacts/contracts/Main.sol/Main.json'
-import { mainAddress } from '../contractAddress'
+import { mainAddress } from './contractAddress'
 
 export async function web3Connect() {
     const web3Modal = new Web3Modal()

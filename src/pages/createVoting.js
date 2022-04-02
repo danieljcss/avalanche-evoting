@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { web3Connect } from "./web3Connect"
+import { web3Connect } from "../utils/web3Connect"
 import { Card, Form, Field, Input, Button, Textarea } from 'rimble-ui'
 
 class Candidate extends Component {

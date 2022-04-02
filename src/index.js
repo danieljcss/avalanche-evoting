@@ -5,9 +5,9 @@ import './index.css'
 import App from './App'
 import { ThemeProvider } from 'rimble-ui'
 
-import { appTheme } from './appTheme'
+import { appTheme } from './utils/appTheme'
 
-import reportWebVitals from './reportWebVitals'
+import reportWebVitals from './utils/reportWebVitals'
 
 ReactDOM.render(
   <React.StrictMode>

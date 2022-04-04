@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import { Box, Button, Card, Form, Field, Input, Modal, Textarea } from 'rimble-ui'
 
 class Candidate extends Component {
@@ -185,7 +185,7 @@ class CreateVoting extends Component {
       { from: this.props.account.getAddress() }
     )
 
-    this.closeModal();
+    this.closeModal(e)
   }
 
   render() {

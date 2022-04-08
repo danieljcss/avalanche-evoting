@@ -10,15 +10,30 @@ class App extends Component {
     super(props)
     this.state = {
       account: null,
-      provider: web3Load().provider,
-      mainInstance: web3Load().mainContract,
+      provider: null,
+      mainInstance: null,
+      isConnecting: true,
+    }
+  }
+
+  async componentDidMount() {
+    const connect = await web3Connect()
+    this.setState({
+      provider: connect.provider,
+      mainInstance: connect.contract,
+      isConnecting: false,
+    })
+    if (typeof connect.account != "undefined") {
+      this.setState(
+        { account: connect.account }
+      )
     }
   }
 
   async connect(e) {
     e.preventDefault()
     try {
-      const connect = await web3Connect()
+      const connect = await web3Load()
       this.setState({
         account: connect.account,
         provider: connect.provider,
@@ -42,6 +57,7 @@ class App extends Component {
               account={this.state.account}
               provider={this.state.provider}
               mainInstance={this.state.mainInstance}
+              isConnecting={this.state.isConnecting}
             />}
           />
         </Routes>

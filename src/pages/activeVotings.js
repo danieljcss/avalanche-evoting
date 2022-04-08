@@ -17,11 +17,13 @@ class ActiveVotings extends Component {
   }
 
   async componentDidMount() {
-    await this.loadData()
+    if (!this.props.isConnecting) {
+      await this.loadData()
+    }
   }
 
   async componentDidUpdate(prevProps) {
-    if (prevProps.account !== this.props.account) {
+    if (prevProps.account !== this.props.account || prevProps.isConnecting !== this.props.isConnecting) {
       await this.loadData()
     }
   }
@@ -106,7 +108,7 @@ class ActiveVotings extends Component {
         />
       )
     }
-    console.log(this.props.account)
+
     this.setState({
       data: votingComponents,
       loading: false,

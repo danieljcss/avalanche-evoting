@@ -1,117 +1,10 @@
 import React, { Component } from "react"
 import { Loader } from "rimble-ui"
 import { ethers } from "ethers"
-import { web3Connect } from "../utils/web3Connect"
-import { formatDate } from "../utils/formatDate"
 import VotingJson from "../artifacts/contracts/Voting.sol/Voting.json"
-import VoteModal from "./voteModal"
+import Voting from "../components/voting"
+import Candidates from "../components/candidates"
 import CreateVoting from "./createVoting"
-
-// Voting component for organising voting details
-class Voting extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      time: new Date(),
-    }
-    this.timer = null
-  }
-
-  componentDidMount() {
-    this.timer = setInterval(this.setTime.bind(this), 1000)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer)
-  }
-
-  setTime() {
-    this.setState({ time: Date.now() })
-  }
-
-  votingState() {
-    if (this.props.voting.hasVoted) {
-      return (
-        <font size="2" color="green">
-          You have voted!
-        </font>
-      )
-    } else if (this.props.voting.votingStart > this.state.time) {
-      return (
-        <font size="2">
-          Not open yet
-        </font>
-      )
-    } else if (this.props.voting.votingEnd < this.state.time) {
-      return (
-        <font className="text-muted" size="2">
-          Already closed
-        </font>
-      )
-    } else {
-      return (
-        <VoteModal voting={this.props.voting} candidates={this.props.candidates} />
-      )
-    }
-  }
-
-  render() {
-    return (
-      <tr>
-        <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.voting.votingId}</td>
-
-        <td>
-          {this.props.voting.votingName} <br />
-          <font className="text-muted" size="2">
-            <b>{this.props.voting.votingDescription}</b>
-          </font>
-          <br />
-          <font className="text-muted" size="2">
-            Contract: <span className="link-address active-votings">
-              <a href={`https://testnet.snowtrace.io/address/${this.props.voting.votingAddress}`}
-                target="_blank" rel="noopener noreferrer"
-              >
-                {`${this.props.voting.votingAddress.slice(0, 10)}...`}
-              </a>
-            </span>
-          </font>
-        </td>
-
-        <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.candidateComponent}</td>
-
-        <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-          <div>
-            <font className="text-muted" size="2.5">
-              <b>Start: </b>
-              {formatDate(this.props.voting.votingStart)}
-            </font>
-          </div>
-          <div>
-            <font className="text-muted" size="2.5">
-              <b>End: </b>
-              {formatDate(this.props.voting.votingEnd)}
-            </font>
-          </div>
-        </td>
-
-        <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-          {this.votingState()}
-        </td>
-      </tr>
-    )
-  }
-}
-
-// Candidate component for organising candidate details of each candidate
-class Candidates extends Component {
-  render() {
-    return (
-      <font size="2">
-        <b>{this.props.name}</b> ({this.props.voteCount}) <br />
-      </font>
-    )
-  }
-}
 
 // ActiveVotings component would fetch and display all the the votings deployed by the contract Main.sol
 class ActiveVotings extends Component {
@@ -120,40 +13,17 @@ class ActiveVotings extends Component {
     this.state = {
       data: [],
       loading: false,
-      account: null,
-      mainInstance: null,
-      provider: null,
-      time: 0,
     }
-    this.timer = null
   }
 
-
-  // Connect application with Metamask and create smart-contract's instance
-  async init() {
-    try {
-      const connect = await web3Connect()
-      this.setState({
-        account: connect.account,
-        mainInstance: connect.contract,
-        provider: connect.provider,
-      })
-    } catch (error) {
-      console.log('Wallet connection failed: ', error)
-    }
-
+  async componentDidMount() {
     await this.loadData()
   }
 
-  loader = false;
-
-  componentDidMount() {
-    this.init()
-  }
-
-  scroll() {
-    const scrollingElement = (document.scrollingElement || document.body)
-    scrollingElement.scrollTop = scrollingElement.scrollHeight + 40
+  async componentDidUpdate(prevProps) {
+    if (prevProps.account !== this.props.account) {
+      await this.loadData()
+    }
   }
 
   async loadData() {
@@ -163,18 +33,21 @@ class ActiveVotings extends Component {
     this.setState({ loading: true })
 
     // votingId maps to total votings created
-    let eCount = await this.state.mainInstance.votingId()
+    let eCount = await this.props.mainInstance.votingId()
     let votings = [], votingDetails = [], votingComponents = []
 
     // Voting details of every voting created by Main contract
     for (let i = 0; i < eCount; i++) {
-      votings[i] = await this.state.mainInstance.Votings(i);
-      let VotingContract = new ethers.Contract(votings[i], VotingJson.abi, this.state.provider)
+      votings[i] = await this.props.mainInstance.Votings(i);
+      let VotingContract = new ethers.Contract(votings[i], VotingJson.abi, this.props.provider)
 
       votingDetails[i] = {}
 
       // Account address of the voter
-      votingDetails[i].account = this.state.account
+      votingDetails[i].account = this.props.account
+
+      // Provider
+      votingDetails[i].provider = this.props.provider
 
       // Each contract's instance
       votingDetails[i].contractInstance = VotingContract
@@ -183,7 +56,11 @@ class ActiveVotings extends Component {
       votingDetails[i].votingAddress = votings[i]
 
       // Boolean indicating wether the contract address has voted or not
-      votingDetails[i].hasVoted = await VotingContract.voters(this.state.account.getAddress())
+      if (this.props.account == null) {
+        votingDetails[i].hasVoted = false
+      } else {
+        votingDetails[i].hasVoted = await VotingContract.voters(this.props.account)
+      }
 
       // Name of the voting
       votingDetails[i].votingName = await VotingContract.name()
@@ -225,14 +102,20 @@ class ActiveVotings extends Component {
           voting={votingDetails[i]}
           candidates={candidates[i]}
           candidateComponent={candidateComponents[i]}
+          loadData={this.loadData.bind(this)}
         />
       )
     }
-
+    console.log(this.props.account)
     this.setState({
       data: votingComponents,
       loading: false,
     })
+  }
+
+  scroll() {
+    const scrollingElement = (document.scrollingElement || document.body)
+    scrollingElement.scrollTop = scrollingElement.scrollHeight + 40
   }
 
   render() {
@@ -247,7 +130,7 @@ class ActiveVotings extends Component {
             onClick={e => this.loadData(e)}
             src="./synchronise.svg"
           />
-          <CreateVoting account={this.state.account} mainInstance={this.state.mainInstance} provider={this.state.provider} />
+          <CreateVoting account={this.props.account} mainInstance={this.props.mainInstance} provider={this.props.provider} loadData={this.loadData.bind(this)} />
         </div>
 
         <table className="table table-hover table-bordered">

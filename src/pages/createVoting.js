@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Box, Button, Card, Form, Field, Input, Modal, Textarea } from 'rimble-ui'
+import { Box, Button, Card, Form, Field, Input, Loader, Modal, Textarea } from 'rimble-ui'
 
 class Candidate extends Component {
   render() {
@@ -30,7 +30,8 @@ class CreateVoting extends Component {
       ncandidates: 0,
       candidates: [],
       candidatesComponents: [],
-      isOpen: false
+      isOpen: false,
+      isLoading: false,
     }
 
     this.timer = null
@@ -175,17 +176,26 @@ class CreateVoting extends Component {
       candidates: this.state.candidates,
     }
 
+    this.setState({
+      isLoading: true
+    })
+
     // Making transaction to the Main contract instance, for creating a new voting
-    await this.props.mainInstance.createVoting(
+    const createVotingTx = await this.props.mainInstance.createVoting(
       votingDetails.votingname,
       votingDetails.description,
       votingDetails.start,
       votingDetails.end,
       votingDetails.candidates,
-      { from: this.props.account.getAddress() }
+      { from: this.props.account }
     )
+    await createVotingTx.wait()
 
+    this.setState({
+      isLoading: false
+    })
     this.closeModal(e)
+    this.props.loadData()
   }
 
   render() {
@@ -275,9 +285,13 @@ class CreateVoting extends Component {
                     </div>) : null}
                 </div>
                 <div className="button-new-voting">
-                  <Button type="submit">
-                    Submit
-                  </Button>
+                  {this.state.isLoading ? (
+                    <Loader size="40px" />
+                  ) : (
+                    <Button type="submit">
+                      Submit
+                    </Button>
+                  )}
                 </div>
 
                 <br />

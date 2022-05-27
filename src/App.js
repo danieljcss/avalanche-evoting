@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { web3Connect, web3Load } from './utils/web3Connect'
+import { changeNetwork } from './utils/switchNetwork'
 import { Routes, Route } from "react-router-dom"
 import Navbar from "./components/navbar"
 import ActiveVotings from "./pages/activeVotings"
@@ -32,6 +33,7 @@ class App extends Component {
 
   async connect(e) {
     e.preventDefault()
+    await changeNetwork()
     try {
       const connect = await web3Load()
       this.setState({

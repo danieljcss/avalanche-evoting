@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import VoteModal from "./voteModal"
 import { formatDate } from "../utils/formatDate"
-import { Box, Card, Heading, Text, Flex } from 'rimble-ui'
+import { Box, Card, Text, Flex } from 'rimble-ui'
 
 // Voting component for organising voting details
 export default class Voting extends Component {

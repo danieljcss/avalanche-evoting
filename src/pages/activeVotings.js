@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Loader } from "rimble-ui"
+import { Flex, Loader } from "rimble-ui"
 import { ethers } from "ethers"
 import VotingJson from "../artifacts/contracts/Voting.sol/Voting.json"
 import Voting from "../components/voting"
@@ -123,8 +123,8 @@ class ActiveVotings extends Component {
   render() {
     return (
       // Simple container to store table with voting data
-      <div className="container pb-5">
-        <div style={{ display: "flex", float: "right", marginBottom: "10px" }}>
+      <Flex className="flex-column container pb-5">
+        <Flex className="col-12 justify-content-end" mb={'10px'}>
           <img
             className="icons"
             style={{ marginRight: "10px" }}
@@ -133,9 +133,9 @@ class ActiveVotings extends Component {
             src="./synchronise.svg"
           />
           <CreateVoting account={this.props.account} mainInstance={this.props.mainInstance} provider={this.props.provider} loadData={this.loadData.bind(this)} />
-        </div>
+        </Flex>
 
-        <table className="table table-hover table-bordered">
+        {/* <table className="table table-hover table-bordered">
           <thead>
             <tr>
               <th style={{ textAlign: "center", width: "60px" }}>ID</th>
@@ -147,10 +147,11 @@ class ActiveVotings extends Component {
           </thead>
 
           <tbody>{this.state.data}</tbody>
-        </table>
+        </table> */}
+        <Flex className="flex-wrap">{this.state.data}</Flex>
 
         <center>{this.state.loading ? <Loader size="40px" /> : <></>}</center>
-      </div>
+      </Flex>
     )
   }
 }

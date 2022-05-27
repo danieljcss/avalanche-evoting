@@ -58,7 +58,7 @@ function VoteModal(props) {
         // This is a rimble-ui builtin modal for triggering vote() function
         <Box p={0}>
             <Box>
-                <Button onClick={openModal}>
+                <Button onClick={openModal} width={'100px'}>
                     Vote
                 </Button>
 

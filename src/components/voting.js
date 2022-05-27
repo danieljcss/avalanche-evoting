@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import VoteModal from "./voteModal"
 import { formatDate } from "../utils/formatDate"
+import { Box, Card, Heading, Text, Flex } from 'rimble-ui'
 
 // Voting component for organising voting details
 export default class Voting extends Component {
@@ -59,49 +60,102 @@ export default class Voting extends Component {
         }
     }
 
+
     render() {
         return (
-            <tr>
-                <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.voting.votingId}</td>
+            <Box mb={'20px'} className="col-12 col-lg-6">
+                <Card >
+                    <Flex className="flex-column">
+                        <Flex className="flex-column align-items-center">
+                            <Text fontSize={'18pt'}>{this.props.voting.votingName}</Text>
+                            <Text className="text-muted">{this.props.voting.votingDescription}</Text>
+                            <Flex className="text-muted">
+                                <Text fontSize={'10pt'} mr={3}>ID: {this.props.voting.votingId}</Text>
 
-                <td>
-                    {this.props.voting.votingName} <br />
-                    <font className="text-muted" size="2">
-                        <b>{this.props.voting.votingDescription}</b>
-                    </font>
-                    <br />
-                    <font className="text-muted" size="2">
-                        Contract: <span className="link-address active-votings">
-                            <a href={`https://testnet.snowtrace.io/address/${this.props.voting.votingAddress}`}
-                                target="_blank" rel="noopener noreferrer"
-                            >
-                                {`${this.props.voting.votingAddress.slice(0, 10)}...`}
-                            </a>
-                        </span>
-                    </font>
-                </td>
+                                <Text fontSize={'10pt'} mr={1}>
+                                    Contract:
+                                </Text>
+                                <Text className="link-address active-votings" fontSize={'10pt'}>
+                                    <a href={`https://testnet.snowtrace.io/address/${this.props.voting.votingAddress}`}
+                                        target="_blank" rel="noopener noreferrer"
+                                    >
+                                        {`${this.props.voting.votingAddress.slice(0, 10)}...`}
+                                    </a>
+                                </Text>
+                            </Flex>
+                        </Flex>
 
-                <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.candidateComponent}</td>
 
-                <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-                    <div>
-                        <font className="text-muted" size="2.5">
-                            <b>Start: </b>
-                            {formatDate(this.props.voting.votingStart)}
-                        </font>
-                    </div>
-                    <div>
-                        <font className="text-muted" size="2.5">
-                            <b>End: </b>
-                            {formatDate(this.props.voting.votingEnd)}
-                        </font>
-                    </div>
-                </td>
+                        <Flex mt={3} className="flex-wrap justify-content-center">
+                            {this.props.candidateComponent}
+                        </Flex>
 
-                <td style={{ textAlign: "center", verticalAlign: "middle" }}>
-                    {this.votingState()}
-                </td>
-            </tr>
+                        <Flex className="flex-column align-items-center" mt={3}>
+                            <Box>
+                                <Text className="text-muted" fontSize={'11pt'}>
+                                    <b>Start: </b>
+                                    {formatDate(this.props.voting.votingStart)}
+                                </Text>
+                            </Box>
+                            <Box>
+                                <Text className="text-muted" fontSize={'11pt'}>
+                                    <b>End: </b>
+                                    {formatDate(this.props.voting.votingEnd)}
+                                </Text>
+                            </Box>
+                        </Flex>
+
+                        <Box mx={'auto'} mt={3}>{this.votingState()}</Box>
+
+
+                    </Flex>
+                </Card>
+            </Box>
         )
     }
+    // render() {
+    //     return (
+    //         <tr>
+    //             <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.voting.votingId}</td>
+
+    //             <td>
+    //                 {this.props.voting.votingName} <br />
+    //                 <font className="text-muted" size="2">
+    //                     <b>{this.props.voting.votingDescription}</b>
+    //                 </font>
+    //                 <br />
+    //                 <font className="text-muted" size="2">
+    //                     Contract: <span className="link-address active-votings">
+    //                         <a href={`https://testnet.snowtrace.io/address/${this.props.voting.votingAddress}`}
+    //                             target="_blank" rel="noopener noreferrer"
+    //                         >
+    //                             {`${this.props.voting.votingAddress.slice(0, 10)}...`}
+    //                         </a>
+    //                     </span>
+    //                 </font>
+    //             </td>
+
+    //             <td style={{ textAlign: "center", verticalAlign: "middle" }}>{this.props.candidateComponent}</td>
+
+    //             <td style={{ textAlign: "center", verticalAlign: "middle" }}>
+    //                 <div>
+    //                     <font className="text-muted" size="2.5">
+    //                         <b>Start: </b>
+    //                         {formatDate(this.props.voting.votingStart)}
+    //                     </font>
+    //                 </div>
+    //                 <div>
+    //                     <font className="text-muted" size="2.5">
+    //                         <b>End: </b>
+    //                         {formatDate(this.props.voting.votingEnd)}
+    //                     </font>
+    //                 </div>
+    //             </td>
+
+    //             <td style={{ textAlign: "center", verticalAlign: "middle" }}>
+    //                 {this.votingState()}
+    //             </td>
+    //         </tr>
+    //     )
+    // }
 }

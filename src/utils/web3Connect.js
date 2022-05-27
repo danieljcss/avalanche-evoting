@@ -20,12 +20,29 @@ export async function web3Load() {
 
 export async function web3Connect() {
     const { ethereum } = window
-    const providerTest = new ethers.providers.Web3Provider(ethereum)
-    const accountsTest = await providerTest.listAccounts()
-
-    if (accountsTest.length > 0) {
-        return web3Load()
+    let hasRightnetwork;
+    if (ethereum !== undefined) {
+        if (ethereum.networkVersion == '80001') {
+            hasRightnetwork = true
+        }
+        else hasRightnetwork = false
     } else {
+        hasRightnetwork = false
+    }
+    if (hasRightnetwork) {
+        const providerTest = new ethers.providers.Web3Provider(ethereum)
+        const accountsTest = await providerTest.listAccounts()
+
+        if (accountsTest.length > 0) {
+            return web3Load()
+        } else {
+            const contract = new ethers.Contract(mainAddress, contractJson.abi, providerTest)
+
+            return { contract: contract, provider: providerTest }
+        }
+    }
+
+    else {
         const providerRPC = new ethers.providers.JsonRpcProvider('https://api.avax-test.network/ext/bc/C/rpc')
         const mainContract = new ethers.Contract(mainAddress, contractJson.abi, providerRPC)
         return { contract: mainContract, provider: providerRPC }

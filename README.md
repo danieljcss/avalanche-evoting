@@ -48,6 +48,6 @@ npx hardhat test
 
 - Solidity: creation of smart contracts
 - React: Frontend Javascript components
-- Rumble: Some UI Components
+- Rimble-UI: Some UI Components
 - Hardhat + Ethers + Chai: Deployment and Testing
 - Bootstrap: CSS Styling
